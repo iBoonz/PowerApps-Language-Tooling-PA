@@ -15,7 +15,8 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         UxComponent,
         DataComponent,
         Test,
-        CommandComponent
+        CommandComponent,
+        FunctionComponent
     }
 
     internal class SourceFile
@@ -38,7 +39,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             {
                 return $"Controls\\{ControlId}.json";
             }
-            else if (this.Kind == SourceKind.DataComponent || this.Kind == SourceKind.UxComponent || this.Kind == SourceKind.CommandComponent)
+            else if (this.Kind == SourceKind.DataComponent || this.Kind == SourceKind.UxComponent || this.Kind == SourceKind.CommandComponent || this.Kind == SourceKind.FunctionComponent)
             {
                 return $"Components\\{ControlId}.json";
             }
@@ -89,6 +90,10 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             else if (x.Template.Id == ControlInfoJson.Template.CommandComponentId)
             {
                 sf.Kind = SourceKind.CommandComponent;
+            }
+            else if (x.Template.Id == ControlInfoJson.Template.FunctionComponentId)
+            {
+                sf.Kind = SourceKind.FunctionComponent;
             }
             else
             {
