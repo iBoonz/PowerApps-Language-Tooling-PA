@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates
 {
-    internal sealed class ControlProperty
+    public sealed class ControlProperty
     {
         public string Name { get; }
         public string DefaultValue { get; }

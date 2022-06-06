@@ -13,7 +13,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
     // A minimal representation of the data component manifest
     // This is client-only. 
     // $$$ - can we get this from the PA file directly?
-    internal class ComponentManifest
+    public class ComponentManifest
     {
         public string Name { get; set; } // a name, "Component1"
         public string TemplateGuid { get; set; } // a guid 
@@ -28,12 +28,12 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         public DataComponentDefinitionJson DataComponentDefinitionKey { get; set; }
 
         // For analysis.
-        internal ControlInfoJson _sources;
+        public ControlInfoJson _sources;
 
-        internal bool IsDataComponent => this.DataComponentDefinitionKey != null;
+        public bool IsDataComponent => this.DataComponentDefinitionKey != null;
 
         // Only data components have this. 
-        internal void Apply(TemplateMetadataJson x)
+        public void Apply(TemplateMetadataJson x)
         {
             x.Validate();
 
@@ -47,7 +47,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         }
 
         // A component will always have this. 
-        internal static ComponentManifest Create(ComponentsMetadataJson.Entry x)
+        public static ComponentManifest Create(ComponentsMetadataJson.Entry x)
         {
             var dc = new ComponentManifest
             {
@@ -76,7 +76,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
 
     // We recreate this file from the min version. 
     // Writes to \references\DataComponentSources.json
-    internal class DataComponentSourcesJson
+    public class DataComponentSourcesJson
     {
         public const string NativeCDSDataSourceInfo = "NativeCDSDataSourceInfo";
 
@@ -101,7 +101,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
     }
 
     // Writes to \References\DataComponentTemplates.json
-    internal class DataComponentTemplatesJson
+    public class DataComponentTemplatesJson
     {
         public TemplateMetadataJson[] ComponentTemplates { get; set; }
 
@@ -114,7 +114,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
 
     // This is used for both UI components and data components. 
     // Writes to \ComponentsMetadata.json
-    internal class ComponentsMetadataJson
+    public class ComponentsMetadataJson
     {
         public class Entry
         {

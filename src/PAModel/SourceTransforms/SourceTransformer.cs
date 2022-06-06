@@ -11,16 +11,16 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.SourceTransforms
 {
-    internal class SourceTransformer
+    public class SourceTransformer
     {
-        internal IList<IControlTemplateTransform> _templateTransforms;
+        public IList<IControlTemplateTransform> _templateTransforms;
 
         // The group control transform operates on the parent of the group control and so can't use
         // the existing template transform mechanism
         // Refactor if another transform is added that also operates on a control based on it's children
-        internal GroupControlTransform _groupControlTransform;
+        public GroupControlTransform _groupControlTransform;
 
-        internal DefaultValuesTransform _defaultValTransform;
+        public DefaultValuesTransform _defaultValTransform;
 
         public SourceTransformer(
             CanvasDocument app,

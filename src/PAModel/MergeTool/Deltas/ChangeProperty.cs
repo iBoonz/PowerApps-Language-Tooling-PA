@@ -12,7 +12,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
 {
-    internal class ChangeProperty : IDelta
+    public class ChangeProperty : IDelta
     {
         public readonly ControlPath ControlPath;
         public readonly string PropertyName;

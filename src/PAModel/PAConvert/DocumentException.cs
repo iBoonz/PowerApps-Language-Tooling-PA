@@ -5,10 +5,10 @@ using System;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools
 {
-    // Internal exception to throw on fatal error to stop document load.
+    // public exception to throw on fatal error to stop document load.
     // Caller should have added an error to the error container first.
     // These should be caught internally. 
-    internal class DocumentException : Exception
+    public class DocumentException : Exception
     {
     }
 }

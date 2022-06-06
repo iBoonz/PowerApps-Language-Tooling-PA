@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.EditorState
 {
-    internal class TemplateStore
+    public class TemplateStore
     {
         // Key is template name, case-sensitive
         public readonly Dictionary<string, CombinedTemplateState> Contents;

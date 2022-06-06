@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.IR
 {
-    internal abstract class IRNodeVisitor<Context>
+    public abstract class IRNodeVisitor<Context>
     {
         public abstract void Visit(BlockNode node, Context context);
         public abstract void Visit(TypedNameNode node, Context context);
@@ -18,7 +18,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.IR
         public abstract void Visit(ArgMetadataBlockNode node, Context context);
     }
 
-    internal class DefaultVisitor<Context> : IRNodeVisitor<Context>
+    public class DefaultVisitor<Context> : IRNodeVisitor<Context>
     {
         public override void Visit(BlockNode node, Context context)
         {

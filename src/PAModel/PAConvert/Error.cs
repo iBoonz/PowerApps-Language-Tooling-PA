@@ -12,12 +12,12 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
     /// </summary>
     public class Error
     {
-        internal ErrorCode Code;
-        internal SourceLocation Span;
+        public ErrorCode Code;
+        public SourceLocation Span;
 
         public string Message;
 
-        internal Error(ErrorCode code, SourceLocation span, string message)
+        public Error(ErrorCode code, SourceLocation span, string message)
         {
             Span = span;
             Message = message;

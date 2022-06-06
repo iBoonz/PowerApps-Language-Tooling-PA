@@ -13,7 +13,7 @@ using SomeEnum = System.String;
 namespace Microsoft.AppMagic.Authoring.Persistence
 {
 
-    internal enum AppType
+    public enum AppType
     {
         DesktopOrTablet = 0,
         Phone = 1,
@@ -23,7 +23,7 @@ namespace Microsoft.AppMagic.Authoring.Persistence
     /// <summary>
     /// Schematic class for Properties.json
     /// </summary>
-    internal class DocumentPropertiesJson
+    public class DocumentPropertiesJson
     {
         public string Author { get; set; }
         public string Name { get; set; }
@@ -121,7 +121,7 @@ namespace Microsoft.AppMagic.Authoring.Persistence
         }
     }
 
-    internal class LocalDatabaseReferenceJson
+    public class LocalDatabaseReferenceJson
     {
         public Dictionary<string, LocalDatabaseReferenceDataSource> dataSources { get; set; }
         public string instanceUrl { get; set; }
@@ -130,7 +130,7 @@ namespace Microsoft.AppMagic.Authoring.Persistence
         public Dictionary<string, JsonElement> ExtensionData { get; set; }
     }
 
-    internal class LocalDatabaseReferenceDataSource
+    public class LocalDatabaseReferenceDataSource
     {
         [JsonExtensionData]
         public Dictionary<string, JsonElement> ExtensionData { get; set; }

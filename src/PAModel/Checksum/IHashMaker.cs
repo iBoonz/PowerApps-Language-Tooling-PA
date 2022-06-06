@@ -2,21 +2,17 @@
 // Licensed under the MIT License.
 
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.IO.Compression;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using System.Xml.Linq;
 
 
 namespace Microsoft.PowerPlatform.Formulas.Tools
 {
     // Helpers for creating chceksums. 
-    interface IHashMaker : IDisposable
+    public interface IHashMaker : IDisposable
     {
         void AppendStartObj();
         void AppendPropName(string name);
@@ -32,21 +28,21 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         // Called after all Appends(). 
         byte[] GetFinalValue();
     }
-     
+
     // Create a checksum using an incremental hash.    
     class Sha256HashMaker : IHashMaker, IDisposable
     {
         private readonly IncrementalHash _hash;
 
-        private readonly static byte[] _startObj = new byte[] { (byte)'{' };
-        private readonly static byte[] _endObj = new byte[] { (byte)'}' };
-        private readonly static byte[] _startArray = new byte[] { (byte)'[' };
-        private readonly static byte[] _endArray = new byte[] { (byte)']' };
-        private readonly static byte[] _null = new byte[] { 254 };
-        private readonly static byte[] _true = new byte[] { 1 };
-        private readonly static byte[] _false = new byte[] { 0 };
+        private static readonly byte[] _startObj = new byte[] { (byte)'{' };
+        private static readonly byte[] _endObj = new byte[] { (byte)'}' };
+        private static readonly byte[] _startArray = new byte[] { (byte)'[' };
+        private static readonly byte[] _endArray = new byte[] { (byte)']' };
+        private static readonly byte[] _null = new byte[] { 254 };
+        private static readonly byte[] _true = new byte[] { 1 };
+        private static readonly byte[] _false = new byte[] { 0 };
 
-        private readonly static byte[] _marker = new byte[] { 255 };
+        private static readonly byte[] _marker = new byte[] { 255 };
 
         public Sha256HashMaker()
         {
@@ -92,7 +88,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
 
         public void AppendEndObj()
         {
-            _hash.AppendData(_endObj);            
+            _hash.AppendData(_endObj);
         }
 
         public void AppendStartArray()

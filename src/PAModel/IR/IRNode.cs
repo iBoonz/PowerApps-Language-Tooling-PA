@@ -6,11 +6,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.IR
 {
-    internal abstract class IRNode
+    public abstract class IRNode
     {
         /// <summary>
         /// Source Locations are only present when reading from source
@@ -24,12 +23,12 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.IR
     /// Represents block construct, may have 0-N child blocks and 0-N properties
     /// </summary>
     [DebuggerDisplay("{Name}: {Properties.Count} props")]
-    internal class BlockNode : IRNode, ICloneable<BlockNode>, IEquatable<BlockNode>
+    public class BlockNode : IRNode, ICloneable<BlockNode>, IEquatable<BlockNode>
     {
         public TypedNameNode Name;
-        public IList<PropertyNode> Properties = new List<PropertyNode>();
-        public IList<FunctionNode> Functions = new List<FunctionNode>();
-        public IList<BlockNode> Children = new List<BlockNode>();
+        public List<PropertyNode> Properties = new List<PropertyNode>();
+        public List<FunctionNode> Functions = new List<FunctionNode>();
+        public List<BlockNode> Children = new List<BlockNode>();
 
         public override void Accept<Context>(IRNodeVisitor<Context> visitor, Context context)
         {
@@ -41,9 +40,9 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.IR
             return new BlockNode()
             {
                 Name = Name.Clone(),
-                Properties = Properties.Clone(),
-                Functions = Functions.Clone(),
-                Children = Children.Clone(),
+                Properties = Properties.Clone().ToList(),
+                Functions = Functions.Clone().ToList(),
+                Children = Children.Clone().ToList(),
             };
         }
 
@@ -76,7 +75,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.IR
     /// Kind = label
     /// </summary>
     [DebuggerDisplay("{Identifier} as {Kind}")]
-    internal class TypedNameNode : IRNode, ICloneable<TypedNameNode>, IEquatable<TypedNameNode>
+    public class TypedNameNode : IRNode, ICloneable<TypedNameNode>, IEquatable<TypedNameNode>
     {
         public string Identifier;
 
@@ -121,7 +120,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.IR
     /// Represents a template like `label` or `gallery.HorizontalGallery`
     /// </summary>
     [DebuggerDisplay("{TypeName}.{OptionalVariant}")]
-    internal class TypeNode : IRNode, ICloneable<TypeNode>, IEquatable<TypeNode>
+    public class TypeNode : IRNode, ICloneable<TypeNode>, IEquatable<TypeNode>
     {
         public string TypeName;
         public string OptionalVariant;
@@ -159,7 +158,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.IR
     }
 
     [DebuggerDisplay("{Identifier}: ={Expression}")]
-    internal class PropertyNode : IRNode, ICloneable<PropertyNode>, IEquatable<PropertyNode>
+    public class PropertyNode : IRNode, ICloneable<PropertyNode>, IEquatable<PropertyNode>
     {
         public string Identifier;
         public ExpressionNode Expression;
@@ -197,7 +196,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.IR
     }
 
     [DebuggerDisplay("{Identifier}({string.Join(',', Args)}):")]
-    internal class FunctionNode : IRNode, ICloneable<FunctionNode>, IEquatable<FunctionNode>
+    public class FunctionNode : IRNode, ICloneable<FunctionNode>, IEquatable<FunctionNode>
     {
         public string Identifier;
         public IList<TypedNameNode> Args = new List<TypedNameNode>();
@@ -238,7 +237,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.IR
     }
 
     [DebuggerDisplay("{Identifier}: ={Default}")]
-    internal class ArgMetadataBlockNode : IRNode, ICloneable<ArgMetadataBlockNode>, IEquatable<ArgMetadataBlockNode>
+    public class ArgMetadataBlockNode : IRNode, ICloneable<ArgMetadataBlockNode>, IEquatable<ArgMetadataBlockNode>
     {
         public string Identifier;
         public ExpressionNode Default;
@@ -276,7 +275,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.IR
     }
 
     [DebuggerDisplay("{Expression}")]
-    internal class ExpressionNode : IRNode, ICloneable<ExpressionNode>, IEquatable<ExpressionNode>
+    public class ExpressionNode : IRNode, ICloneable<ExpressionNode>, IEquatable<ExpressionNode>
     {
         public string Expression;
         public override void Accept<Context>(IRNodeVisitor<Context> visitor, Context context)

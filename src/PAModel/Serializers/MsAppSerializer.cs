@@ -12,12 +12,11 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using System.Text.Encodings;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools
 {
     // Read/Write to an .msapp file. 
-    internal static class MsAppSerializer
+    public static class MsAppSerializer
     {
         public const string ConnectionInstanceIDPropertyName = "connectionInstanceId";
 
@@ -313,7 +312,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
 
                                 // Basically making sure conn instance id is not added to app._connections
                                 extensionData.Remove(ConnectionInstanceIDPropertyName);
-                            }                              
+                            }
                         }
                     }
 
@@ -337,7 +336,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
                         app._properties.LocalDatabaseReferences = null;
                     }
                 }
-              
+
                 if (!string.IsNullOrEmpty(app._properties.InstrumentationKey))
                 {
                     app._appInsights = new AppInsightsKeyJson() { InstrumentationKey = app._properties.InstrumentationKey };
@@ -420,12 +419,12 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             return app;
         }
 
-        internal static void AddFile(this CanvasDocument app, FileEntry entry)
+        public static void AddFile(this CanvasDocument app, FileEntry entry)
         {
             app._unknownFiles.Add(entry.Name, entry);
         }
 
-        internal static void AddAssetFile(this CanvasDocument app, FileEntry entry)
+        public static void AddAssetFile(this CanvasDocument app, FileEntry entry)
         {
             app._assetFiles.Add(entry.Name, entry);
         }
@@ -529,7 +528,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         }
 
         // Get everything that should be stored as a file in the .msapp.
-        private static IEnumerable<FileEntry> GetMsAppFiles(this CanvasDocument app, ErrorContainer errors)
+        public static IEnumerable<FileEntry> GetMsAppFiles(this CanvasDocument app, ErrorContainer errors)
         {
             // Loose files
             foreach (var file in app._unknownFiles.Values)
@@ -854,7 +853,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             throw new DocumentException();
         }
 
-        internal static FileEntry ToFile<T>(FileKind kind, T value)
+        public static FileEntry ToFile<T>(FileKind kind, T value)
         {
             var filename = FileEntry.GetFilenameForKind(kind);
 

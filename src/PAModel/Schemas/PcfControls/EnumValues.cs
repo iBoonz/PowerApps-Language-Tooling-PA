@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas.PcfControl
 {
-    internal struct EnumValue
+    public struct EnumValue
     {
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; }

@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas.PcfControl
 {
-    internal struct DataConnectorMetadata
+    public struct DataConnectorMetadata
     {
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; }

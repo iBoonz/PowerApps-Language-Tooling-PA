@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
 {
-    internal class AddTemplate : IDelta
+    public class AddTemplate : IDelta
     {
         private string _name;
         private CombinedTemplateState _template;

@@ -61,7 +61,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
 
         // Return null if not checksumed
         // T is the checksum aglorithm to use  - this allows passing in a debug algorithm.
-        internal static byte[] ChecksumFile<T>(string filename, byte[] bytes)
+        public static byte[] ChecksumFile<T>(string filename, byte[] bytes)
             where T : IHashMaker, new()
         {
             if (filename.EndsWith(ChecksumName, StringComparison.OrdinalIgnoreCase))
@@ -183,7 +183,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             }
         }
 
-        internal static string ChecksumToString(byte[] bytes)
+        public static string ChecksumToString(byte[] bytes)
         {
             return "C" + Version.ToString() + "_" + Convert.ToBase64String(bytes);
         }
@@ -194,7 +194,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         /// </summary>
         /// <param name="checksum">The checksum.</param>
         /// <returns>Returns the int version of the checksum</returns>
-        internal static int GetChecksumVersion(string checksum)
+        public static int GetChecksumVersion(string checksum)
         {
             var version = checksum.Split('_').First();
             return int.Parse(version.Substring(1));
@@ -228,7 +228,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         // Formula whitespace can differ between platforms, and leading whitespace
         // is affected by writing to .pa format. Normalize so checksums are
         // platform independent
-        internal static string NormFormulaWhitespace(string s)
+        public static string NormFormulaWhitespace(string s)
         {
             StringBuilder sb = new StringBuilder();
             var lastCharIsWhitespace = true;

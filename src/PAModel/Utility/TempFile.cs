@@ -9,7 +9,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
     /// <summary>
     /// Return a full path for a temporary file, and delete it at Dispose.
     /// </summary>
-    internal class TempFile : IDisposable
+    public class TempFile : IDisposable
     {
         public string FullPath { get; private set; }
 
@@ -31,7 +31,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
     /// <summary>
     /// Return a unique temporary directory and delete it at Dispose
     /// </summary>
-    internal class TempDir : IDisposable
+    public class TempDir : IDisposable
     {
         public string Dir { get; private set; }
 

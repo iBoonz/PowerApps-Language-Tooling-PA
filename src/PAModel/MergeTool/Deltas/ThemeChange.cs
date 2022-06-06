@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
 {
-    internal class ThemeChange : IDelta
+    public class ThemeChange : IDelta
     {
         private ThemesJson _theme;
 

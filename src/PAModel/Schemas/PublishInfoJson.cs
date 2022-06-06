@@ -8,7 +8,7 @@ using System.Text.Json.Serialization;
 
 namespace Microsoft.AppMagic.Authoring.Persistence
 {
-    internal class PublishInfoJson
+    public class PublishInfoJson
     {
         public string AppName { get; set; }
         public string BackgroundColor { get; set; }

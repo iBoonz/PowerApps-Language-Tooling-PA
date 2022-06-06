@@ -22,7 +22,7 @@ using System.Text.Json.Serialization;
 namespace Microsoft.PowerPlatform.Formulas.Tools
 {
     // Various utility methods.
-    internal static class Utilities
+    public static class Utilities
     {
         public const int MaxNameLength = 50;
 

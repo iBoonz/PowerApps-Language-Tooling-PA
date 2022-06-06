@@ -14,7 +14,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.Utility
     /// Each segment is a control name
     /// </summary>
     [DebuggerDisplay("{string.Join('.', _segments)}")]
-    internal class ControlPath
+    public class ControlPath
     {
         // switch this to be a queue?
         private List<string> _segments;

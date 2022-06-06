@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
 {
-    internal class AddDataSource : IDelta
+    public class AddDataSource : IDelta
     {
         public string Name;
         public List<DataSourceEntry> Contents;
@@ -20,7 +20,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
             document._dataSources.Add(Name, Contents);
         }
     }
-    internal class RemoveDataSource : IDelta
+    public class RemoveDataSource : IDelta
     {
         public string Name;
 

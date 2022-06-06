@@ -9,7 +9,7 @@ using System.Text.Json;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
 {
-    internal class DocumentPropertiesChange : IDelta
+    public class DocumentPropertiesChange : IDelta
     {
         public readonly string Name;
         private object _propertyValue;

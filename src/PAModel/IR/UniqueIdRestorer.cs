@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.IR
 {
-    internal class UniqueIdRestorer
+    public class UniqueIdRestorer
     {
         private readonly Dictionary<string, int> _controlUniqueIds;
         private int _nextId;

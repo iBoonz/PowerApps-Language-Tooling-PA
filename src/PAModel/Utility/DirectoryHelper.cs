@@ -1,19 +1,21 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using System.IO;
-using System.Text.Json;
-using System.Linq;
-using System.Xml.Linq;
 using Microsoft.PowerPlatform.Formulas.Tools.IR;
+using Microsoft.PowerPlatform.Formulas.Tools.PA;
 using Microsoft.PowerPlatform.Formulas.Tools.Utility;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.Json;
+using System.Xml.Linq;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools
 {
     // Abstraction over file system. 
     // Helps organize full path, relative paths
-    internal class DirectoryWriter
+    public class DirectoryWriter
     {
         private readonly string _directory;
 
@@ -170,13 +172,14 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
 
     // Abstraction over file system. 
     // Helps organize full path, relative paths
-    internal class DirectoryReader
+    public class DirectoryReader
     {
-        private readonly string _directory;
-
-        public DirectoryReader(string directory)
+        private readonly List<BlobContentWithName> _blobElements;
+        private readonly string _relativePath;
+        public DirectoryReader(List<BlobContentWithName> blobElements, string relativePath)
         {
-            this._directory = directory;
+            this._blobElements = blobElements;
+            this._relativePath = relativePath;
         }
 
         // A file that can be read. 
@@ -184,7 +187,8 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         {
             private string _fullpath;
             public FileKind Kind;
-            internal string _relativeName;
+            public string _relativeName;
+            public byte[] Content;
 
             public Entry(string fullPath)
             {
@@ -209,73 +213,56 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
                 return new FileEntry
                 {
                     Name = FilePath.FromPlatformPath(_relativeName),
-                    RawBytes = File.ReadAllBytes(this._fullpath)
+                    RawBytes = Content
                 };
             }
 
             public T ToObject<T>()
             {
-                if (Utilities.IsYamlFile(_fullpath))
-                {
-                    using (var textReader = new StreamReader(_fullpath))
-                    {
-                        var obj = YamlPocoSerializer.Read<T>(textReader);
-                        return obj;
-                    }
-                }
-                else
-                {
-                    var str = File.ReadAllText(_fullpath);
-                    return JsonSerializer.Deserialize<T>(str, Utilities._jsonOpts);
-                }
+                return JsonSerializer.Deserialize<T>(Content, Utilities._jsonOpts);
             }
 
             public string GetContents()
             {
-                return File.ReadAllText(_fullpath);
+                return System.Text.Encoding.UTF8.GetString(this.Content);
             }
         }
 
         // Returns file entries. 
-        public Entry[] EnumerateFiles(string subdir, string pattern = "*", bool searchSubdirectories = true)
+        public Entry[] EnumerateFiles(string subdir, string pattern = "", bool searchSubdirectories = true)
         {
-            var root = Path.Combine(_directory, subdir);
-
-            if (!Directory.Exists(root))
+            var entries = new List<Entry>();
+            foreach (var b in _blobElements)
             {
-                return new Entry[0];
+                var subIndex = b.Name.IndexOf(_relativePath) + _relativePath.Length;
+                if (subIndex >= b.Name.Length)
+                {
+                    throw new ArgumentException("start is bigger then contet");
+                }
+                var relativeName = b.Name.Substring(subIndex, b.Name.Length - subIndex);
+                if (relativeName.StartsWith(subdir))
+                {
+                    if (!relativeName.EndsWith(pattern.Replace("*", "")))
+                    {
+                        continue;
+                    }
+                    if (!string.IsNullOrWhiteSpace(subdir))
+                    {
+                        var subDirLength = relativeName.IndexOf(subdir) + subdir.Length + 1;
+                        relativeName = relativeName.Substring(subDirLength, relativeName.Length - subDirLength);
+                    }
+                    entries.Add(new Entry(b.Name)
+                    {
+                        _relativeName = relativeName,
+                        Kind = FileEntry.TriageKind(FilePath.FromPlatformPath(relativeName)),
+                        Content = b.Content
+                    });
+                }
+
             }
-
-            var fullPaths = Directory.EnumerateFiles(root, pattern, searchSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
-
-            var entries = from fullPath in fullPaths
-                          let relativePath = Utilities.GetRelativePath(root, fullPath)
-                          select new Entry(fullPath)
-                          {
-                              _relativeName = relativePath,
-                              Kind = FileEntry.TriageKind(FilePath.FromPlatformPath(relativePath))
-                          };
-
-            return entries.ToArray();
-        }
-
-        // Returns subdirectories. 
-        public DirectoryReader[] EnumerateDirectories(string subdir, string pattern = "*", bool searchSubdirectories = false)
-        {
-            var root = Path.Combine(_directory, subdir);
-
-            if (!Directory.Exists(root))
-            {
-                return new DirectoryReader[0];
-            }
-
-            var fullPaths = Directory.EnumerateDirectories(root, pattern, searchSubdirectories ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
-
-            var entries = from fullPath in fullPaths
-                          let relativePath = Utilities.GetRelativePath(root, fullPath)
-                          select new DirectoryReader(fullPath);
 
             return entries.ToArray();
         }
     }
+
 }

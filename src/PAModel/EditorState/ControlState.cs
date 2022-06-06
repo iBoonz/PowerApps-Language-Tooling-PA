@@ -7,7 +7,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.EditorState
     /// Per control, this is the studio state content that doesn't wind up in the IR
     /// Similar to <seealso cref="ControlInfoJson.Item"/> without the info encoded by .pa
     /// </summary>
-    internal class ControlState
+    public class ControlState
     {
         public string Name { get; set; }
 
@@ -50,7 +50,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.EditorState
 
         // This is a list of the controls represented as a child of the group control in studio
         // Used in GroupControlTransform.cs, and not written to .editorstate.json
-        internal List<string> GroupedControlsKey;
+        public List<string> GroupedControlsKey;
 
         public ControlState Clone()
         {

@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas.PcfControl
 {
-    internal struct Property
+    public struct Property
     {
         public string Name { get; set; }
         public string DisplayName { get; set; }

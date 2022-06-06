@@ -12,7 +12,7 @@ using static Microsoft.PowerPlatform.Formulas.Tools.ControlInfoJson;
 namespace Microsoft.PowerPlatform.Formulas.Tools.EditorState
 {
     // A combination of the control templates present in Templates.json and the control files
-    internal class CombinedTemplateState
+    public class CombinedTemplateState
     {
         public string Id { get; set; }
 

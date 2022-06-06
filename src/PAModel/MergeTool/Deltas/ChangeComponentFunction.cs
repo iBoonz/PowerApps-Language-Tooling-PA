@@ -11,7 +11,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
 {
-    internal class ChangeComponentFunction : IDelta
+    public class ChangeComponentFunction : IDelta
     {
         public readonly ControlPath ControlPath;
         public readonly string PropertyName;

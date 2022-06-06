@@ -14,7 +14,7 @@ using System.Text.RegularExpressions;
 namespace Microsoft.PowerPlatform.Formulas.Tools
 {
     // Encapsulate the ThemeJson.
-    internal class Theme
+    public class Theme
     {
         // Outer key is stylename, inner key is property name, inner value is expression
         private readonly Dictionary<string, Dictionary<string, string>> _styles = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);

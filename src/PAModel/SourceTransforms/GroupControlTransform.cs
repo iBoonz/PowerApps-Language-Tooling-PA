@@ -20,7 +20,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.SourceTransforms
     /// since the transform deals with controls that are peers within the IR.
     /// As such, it needs to be run on the Parent of the group control, not on the group control itself.
     /// </summary>
-    internal class GroupControlTransform
+    public class GroupControlTransform
     {
         private static readonly string GroupControlTemplateName = "group";
 

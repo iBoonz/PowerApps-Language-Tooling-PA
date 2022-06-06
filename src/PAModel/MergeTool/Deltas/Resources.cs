@@ -12,7 +12,7 @@ using System.Diagnostics.Contracts;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
 {
-    internal class AddResource : IDelta
+    public class AddResource : IDelta
     {
         private FileEntry _file;
         private ResourceJson _resource;
@@ -48,7 +48,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
         }
     }
 
-    internal class RemoveResource : IDelta
+    public class RemoveResource : IDelta
     {
         private string _name;
         private FilePath _assetKey;
@@ -76,7 +76,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
         }
     }
 
-    internal class UpdateResource : IDelta
+    public class UpdateResource : IDelta
     {
         private string _name;
         private FileEntry _file; // null if no contents. 

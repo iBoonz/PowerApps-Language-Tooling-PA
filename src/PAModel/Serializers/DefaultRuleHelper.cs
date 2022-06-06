@@ -14,7 +14,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.Serializers
     // Used by reader/writer to add/remove default rules - avoid redundancy.
     // The exact defaulting rules don't actually matter, as long as it's the same for
     // read and write so that we roundtrip. 
-    internal class DefaultRuleHelper
+    public class DefaultRuleHelper
     {
         private ControlTemplate _template;
         private string _templateName;

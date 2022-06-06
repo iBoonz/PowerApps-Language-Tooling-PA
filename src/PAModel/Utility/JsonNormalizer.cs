@@ -18,7 +18,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
 {
     // Write out Json in a normalized sorted order. 
     // Orders properties, whitespace/indenting, etc. 
-    internal class JsonNormalizer
+    public class JsonNormalizer
     {
         public static string Normalize(string jsonStr)
         {

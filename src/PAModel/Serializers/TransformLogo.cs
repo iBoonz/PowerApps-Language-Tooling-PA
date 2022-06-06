@@ -14,7 +14,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
     // Find the file - based on the PublishInfo.LogoFileName and pull it out. 
     // Normalize name (logo.jpg), touchup PublishInfo so that it's stable.
     // Save the old name in Entropy so that we can still roundtrip. 
-    internal static class TransformLogo
+    public static class TransformLogo
     {
         public static void TranformLogoOnLoad(this CanvasDocument app)
         {

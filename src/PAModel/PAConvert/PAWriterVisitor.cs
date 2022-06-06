@@ -15,9 +15,9 @@ using System.Text;
 namespace Microsoft.PowerPlatform.Formulas.Tools
 {
     // Result is a bunch of strings, context is indentLevel
-    internal class PAWriterVisitor : IRNodeVisitor<PAWriterVisitor.Context>
+    public class PAWriterVisitor : IRNodeVisitor<PAWriterVisitor.Context>
     {
-        internal class Context
+        public class Context
         {
             public YamlWriter _yaml;
             public StringBuilder _sb = new StringBuilder();

@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.EditorState
 {
-    internal class EditorStateStore
+    public class EditorStateStore
     {
         // Key is control name, case-sensitive
         private readonly Dictionary<string, ControlState> _controls;

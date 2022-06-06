@@ -12,7 +12,7 @@ using System.Text.Json.Serialization;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools
 {
-    internal class ControlInfoJson
+    public class ControlInfoJson
     {
         public class RuleEntry
         {

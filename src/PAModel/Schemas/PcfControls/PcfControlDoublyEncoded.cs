@@ -8,7 +8,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas.PcfControl
 {
-    internal class PcfControlDoublyEncoded
+    public class PcfControlDoublyEncoded
     {
         public string ControlNamespace { get; set; }
         public string DisplayNameKey { get; set; }

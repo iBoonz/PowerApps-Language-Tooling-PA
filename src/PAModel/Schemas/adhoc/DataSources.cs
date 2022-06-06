@@ -10,7 +10,7 @@ using System.Text.Json.Serialization;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools
 {
-    internal class DataSourceModel
+    public class DataSourceModel
     {
         public const string DataComponentType = "DataComponent";
 
@@ -53,7 +53,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         public DataComponentSourcesJson.Entry DataComponentDetails { get; set; }
 
         // Don't serialize. 
-        internal bool IsDataComponent => this.DataComponentDetails != null;
+        public bool IsDataComponent => this.DataComponentDetails != null;
 
         // Was the environment guid removed from the view name?
         // This allows for switching environments to just switch the pkg folder
@@ -69,14 +69,14 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         public Dictionary<string, JsonElement> ExtensionData { get; set; }
     }
 
-    internal class WadlDefinition
+    public class WadlDefinition
     {
         public string WadlXml { get; set; }
         public string SwaggerJson { get; set; }
     }
 
 
-    internal class DataSourceDefinition
+    public class DataSourceDefinition
     {
         public string DatasetName { get; set; }
         public string EntityName { get; set; }
@@ -91,24 +91,24 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         public Dictionary<string, JsonElement> ExtensionData { get; set; }
     }
 
-    internal class DataSourceTableDefinition
+    public class DataSourceTableDefinition
     {
         [JsonExtensionData]
         public Dictionary<string, JsonElement> ExtensionData { get; set; }
     }
 
-    internal class SwaggerDefinition
+    public class SwaggerDefinition
     {
         [JsonExtensionData]
         public Dictionary<string, JsonElement> ExtensionData { get; set; }
     }
 
-    internal class DataSourceEntry : DataSourceModel
+    public class DataSourceEntry : DataSourceModel
     {
         
     }
 
-    internal class DataSourcesJson
+    public class DataSourcesJson
     {
         // Order here is random on server. 
         public DataSourceEntry[] DataSources { get; set; }

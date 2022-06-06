@@ -11,7 +11,7 @@ using System.Text.Json.Serialization;
 namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas
 {
     // From PowerApps-Client\src\Cloud\DocumentServer.Core\Document\Document\Persistence\Serialization\Schemas\Control\Template\TemplateMetadataJson.cs
-    internal class TemplateMetadataJson
+    public class TemplateMetadataJson
     {
         public string Name { get; set; }
         public string OriginalName { get; set; }

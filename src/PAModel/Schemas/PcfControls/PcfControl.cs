@@ -9,7 +9,7 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas.PcfControl
 {
-    internal class PcfControl
+    public class PcfControl
     {
         // Name and Version are not part of the DynamicControlDefinitionJson.
         // These are used generate the filename that is sharded into pkgs/PcfTemplates directory.
@@ -74,7 +74,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas.PcfControl
             return pcfControl;
         }
 
-        internal static string GenerateDynamicControlDefinition(PcfControl control)
+        public static string GenerateDynamicControlDefinition(PcfControl control)
         {
             // PowerApps controls require dynamic control definition added to control's template.
             // When generating DynamicControlDefinitionJson don't add Name and Version as those aren't part of it.

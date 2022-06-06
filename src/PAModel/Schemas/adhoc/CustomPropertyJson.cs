@@ -8,9 +8,9 @@ using System.Text.Json.Serialization;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas
 {
-    internal class CustomPropertyJson
+    public class CustomPropertyJson
     {
-        internal class ScopeVariableInfo
+        public class ScopeVariableInfo
         {
             public string ScopeVariableName { get; set; }
             public string ParentPropertyName { get; set; }
@@ -27,7 +27,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas
             public Dictionary<string, object> ExtensionData { get; set; }
         }
         
-        internal class PropertyScopeRules
+        public class PropertyScopeRules
         {
             public string Name { get; set; }
             public ScopeVariableInfo ScopeVariableInfo { get; set; }
@@ -36,7 +36,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas
             public Dictionary<string, object> ExtensionData { get; set; }
         }
 
-        internal class PropertyScope
+        public class PropertyScope
         {
             public PropertyScopeRules[] PropertyScopeRulesKey { get; set; }
 

@@ -3,19 +3,18 @@
 
 using Microsoft.PowerPlatform.Formulas.Tools;
 using System.Collections.Generic;
-using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Microsoft.AppMagic.Authoring.Persistence
 {
-    internal enum DataComponentDependencyKind
+    public enum DataComponentDependencyKind
     {
         Cds,
         DataComponent,
         Unknown
     }
 
-    internal enum DataComponentDefinitionKind
+    public enum DataComponentDefinitionKind
     {
         /// <summary>
         /// Data component type mirrors a CDS entity.
@@ -33,18 +32,18 @@ namespace Microsoft.AppMagic.Authoring.Persistence
         Unknown
     }
 
-    internal class CdsDataDependencyJson
+    public class CdsDataDependencyJson
     {
         public string LogicalName { get; set; }
         public string DataSetName { get; set; }
     }
 
-    internal class DataComponentDependencyJson
+    public class DataComponentDependencyJson
     {
         public string DataComponentTemplateName { get; set; }
     }
 
-    internal class DataComponentDataDependencyJson
+    public class DataComponentDataDependencyJson
     {
         public DataComponentDependencyKind DataComponentExternalDependencyKind { get; set; }
         public CdsDataDependencyJson DataComponentCdsDependency { get; set; }
@@ -54,7 +53,7 @@ namespace Microsoft.AppMagic.Authoring.Persistence
     /// <summary>
     /// Schematic class which represents a data component definition, i.e. names and template
     /// </summary>
-    internal class DataComponentDefinitionJson
+    public class DataComponentDefinitionJson
     {
         public string PreferredName { get; set; }
         public string LogicalName { get; set; }
@@ -66,7 +65,7 @@ namespace Microsoft.AppMagic.Authoring.Persistence
     }
 
 
-    internal class ComponentDefinitionInfoJson
+    public class ComponentDefinitionInfoJson
     {
         public string Name { get; set; }
         public string LastModifiedTimestamp { get; set; } // "637335420246436668",

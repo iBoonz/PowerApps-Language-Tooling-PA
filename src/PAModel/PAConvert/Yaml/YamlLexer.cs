@@ -12,7 +12,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.Yaml
 {
-    internal enum YamlTokenKind
+    public enum YamlTokenKind
     {
         /// <summary>
         /// A property. Could be 
@@ -43,10 +43,10 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.Yaml
     /// <summary>
     /// A yaml token in the file. 
     /// </summary>
-    internal class YamlToken
+    public class YamlToken
     {
-        internal static YamlToken EndObj = new YamlToken { Kind = YamlTokenKind.EndObj };       
-        internal static YamlToken EndOfFile = new YamlToken { Kind = YamlTokenKind.EndOfFile };
+        public static YamlToken EndObj = new YamlToken { Kind = YamlTokenKind.EndObj };       
+        public static YamlToken EndOfFile = new YamlToken { Kind = YamlTokenKind.EndOfFile };
 
         public YamlTokenKind Kind { get; set; }
 
@@ -117,7 +117,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.Yaml
     /// See https://yaml.org/
     /// This will strip '=' signs at the start of single property values. 
     /// </summary>
-    internal class YamlLexer
+    public class YamlLexer
     {
         private static string NewLine = "\r\n";
 
@@ -696,7 +696,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.Yaml
             // Map property name to line that it was declared on. 
             public Dictionary<string, int> _previousProperties = new Dictionary<string, int>(StringComparer.Ordinal);
 
-            internal YamlToken CheckDuplicate(string propName, int currentLine)
+            public YamlToken CheckDuplicate(string propName, int currentLine)
             {
                 int oldLine;
                 if (_previousProperties.TryGetValue(propName, out oldLine))

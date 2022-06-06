@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
 {
-    internal class ScreenOrderChange : IDelta
+    public class ScreenOrderChange : IDelta
     {
         private readonly List<string> _screenOrder;
 

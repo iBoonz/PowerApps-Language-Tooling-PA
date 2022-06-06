@@ -12,7 +12,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool
 {
-    internal class ControlDiffVisitor : DefaultVisitor<ControlDiffContext>
+    public class ControlDiffVisitor : DefaultVisitor<ControlDiffContext>
     {
         private List<IDelta> _deltas;
         private readonly EditorStateStore _childStateStore;
@@ -203,7 +203,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool
         }
     }
 
-    internal class ControlDiffContext
+    public class ControlDiffContext
     {
         public IRNode Theirs { get; }
         public ControlPath Path { get; }

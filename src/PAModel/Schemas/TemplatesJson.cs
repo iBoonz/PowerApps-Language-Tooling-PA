@@ -5,9 +5,9 @@ using Microsoft.PowerPlatform.Formulas.Tools.Schemas;
 
 namespace Microsoft.AppMagic.Authoring.Persistence
 {
-    internal class TemplatesJson
+    public class TemplatesJson
     {
-        internal class TemplateJson
+        public class TemplateJson
         {
             /// <summary>
             /// Template Name, matches ControlInfoJson.Template.Name

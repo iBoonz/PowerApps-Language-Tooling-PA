@@ -1,21 +1,20 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using Microsoft.PowerPlatform.Formulas.Tools.IR;
+using Microsoft.AppMagic.Authoring.Persistence;
 using Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates;
 using Microsoft.PowerPlatform.Formulas.Tools.EditorState;
-using System.Collections.Generic;
-using System.Text;
-using System.Linq;
-using Microsoft.AppMagic.Authoring.Persistence;
-using System;
+using Microsoft.PowerPlatform.Formulas.Tools.IR;
 using Microsoft.PowerPlatform.Formulas.Tools.Schemas;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools
 {
-    internal static class IRStateHelpers
+    public static class IRStateHelpers
     {
-        internal static void SplitIRAndState(SourceFile file, EditorStateStore stateStore, TemplateStore templateStore, Entropy entropy, out BlockNode topParentIR)
+        public static void SplitIRAndState(SourceFile file, EditorStateStore stateStore, TemplateStore templateStore, Entropy entropy, out BlockNode topParentIR)
         {
             var topParentJson = file.Value.TopParent;
             SplitIRAndState(topParentJson, topParentJson.Name, 0, stateStore, templateStore, entropy, out topParentIR);
@@ -40,7 +39,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             {
                 if (!isComponentDef)
                 {
-                   
+
                     var customPropScopeRules = control.Template.CustomProperties
                         .Where(customProp => customProp.IsFunctionProperty)
                         .SelectMany(customProp =>
@@ -233,7 +232,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             return (prop, state);
         }
 
-        internal static SourceFile CombineIRAndState(BlockNode blockNode, ErrorContainer errors, EditorStateStore stateStore, TemplateStore templateStore, UniqueIdRestorer uniqueIdRestorer, Entropy entropy)
+        public static SourceFile CombineIRAndState(BlockNode blockNode, ErrorContainer errors, EditorStateStore stateStore, TemplateStore templateStore, UniqueIdRestorer uniqueIdRestorer, Entropy entropy)
         {
             var topParentJson = CombineIRAndState(blockNode, errors, string.Empty, false, stateStore, templateStore, uniqueIdRestorer, entropy);
             return SourceFile.New(new ControlInfoJson() { TopParent = topParentJson.item });

@@ -13,7 +13,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
     // ResouceJson.cs file has an entry for all the resources that are referred in the app.
     // The resources are of two kinds: Uri and LocalFile
     // The information for the LocalFile resources can be emitted since this information can be dynamically generated, based on the files present in Assets directory.
-    internal static class TranformResourceJson
+    public static class TranformResourceJson
     {
         public static Regex ImageExtensionRegEx = new Regex(".*\\.(?i)(gif|jpg|png|bmp|jpeg|tiff|tif|svg)$", RegexOptions.IgnoreCase);
 

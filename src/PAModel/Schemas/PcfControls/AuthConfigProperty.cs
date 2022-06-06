@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas.PcfControl
 {
-    internal class AuthConfigProperty
+    public class AuthConfigProperty
     {
         [JsonExtensionData]
         public Dictionary<string, object> ExtensionData { get; set; }

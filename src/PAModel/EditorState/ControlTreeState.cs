@@ -8,7 +8,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.EditorState
     /// <summary>
     /// Represents the top level of an editor state and its control tree.
     /// </summary>
-    internal class ControlTreeState
+    public class ControlTreeState
     {
         /// <summary>
         /// The name of the top level control for the editor state.

@@ -5,6 +5,7 @@ using Microsoft.AppMagic.Authoring.Persistence;
 using Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates;
 using Microsoft.PowerPlatform.Formulas.Tools.EditorState;
 using Microsoft.PowerPlatform.Formulas.Tools.IR;
+using Microsoft.PowerPlatform.Formulas.Tools.PA;
 using Microsoft.PowerPlatform.Formulas.Tools.Schemas;
 using Microsoft.PowerPlatform.Formulas.Tools.Schemas.PcfControl;
 using Microsoft.PowerPlatform.Formulas.Tools.SourceTransforms;
@@ -19,7 +20,7 @@ using System.Text.Json;
 namespace Microsoft.PowerPlatform.Formulas.Tools
 {
     // Read/Write to a source format. 
-    internal static partial class SourceSerializer
+    public static partial class SourceSerializer
     {
         // 1 - .pa1 format
         // 2 - intro to .pa.yaml format.
@@ -77,30 +78,15 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
 
         // Full fidelity read-write
 
-        public static CanvasDocument LoadFromSource(string directory2, ErrorContainer errors)
+        public static CanvasDocument LoadFromSource(List<BlobContentWithName> blobContents, ErrorContainer errors, string relativePath = "")
         {
-            if (File.Exists(directory2))
-            {
-                if (directory2.EndsWith(".msapp", StringComparison.OrdinalIgnoreCase))
-                {
-                    errors.BadParameter($"Must point to a source directory, not an msapp file ({directory2}");
-                }
-            }
-
-            Utilities.VerifyDirectoryExists(errors, directory2);
-
-            if (errors.HasErrors)
-            {
-                return null;
-            }
-
-            var dir = new DirectoryReader(directory2);
+            var dir = new DirectoryReader(blobContents, relativePath);
             var app = new CanvasDocument();
             string appInsightsInstumentationKey = null;
 
             // Do the manifest check (and version check) first. 
             // MAnifest lives in top-level directory. 
-            foreach (var file in dir.EnumerateFiles("", "*.json"))
+            foreach (var file in dir.EnumerateFiles("", ".json"))
             {
                 switch (file.Kind)
                 {
@@ -134,7 +120,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
                         break;
                 }
             }
-            foreach (var file in dir.EnumerateFiles("", "*.yaml"))
+            foreach (var file in dir.EnumerateFiles("", ".yaml"))
             {
                 switch (file.Kind)
                 {
@@ -157,10 +143,10 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             }
 
             // Load template files, recreate References/templates.json
-            LoadTemplateFiles(errors, app, Path.Combine(directory2, PackagesDir), out var templateDefaults);
+            LoadTemplateFiles(errors, app, blobContents, out var templateDefaults, relativePath);
 
             // Load PowerAppsControl Templates
-            LoadPcfControlTemplateFiles(errors, app, Path.Combine(directory2, PackagesDir, PcfControlTemplatesDir));
+            LoadPcfControlTemplateFiles(errors, app, blobContents, relativePath, PcfControlTemplatesDir);
 
             foreach (var file in dir.EnumerateFiles(EntropyDir))
             {
@@ -278,7 +264,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             return app;
         }
 
-        public static CanvasDocument Create(string appName, string packagesPath, IList<string> paFiles, ErrorContainer errors)
+        public static CanvasDocument Create(string appName, List<BlobContentWithName> blobs, IList<string> paFiles, ErrorContainer errors, string relativePath)
         {
             var app = new CanvasDocument();
 
@@ -286,7 +272,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             app._header = HeaderJson.CreateDefault();
             app._parameterSchema = new ParameterSchema();
 
-            LoadTemplateFiles(errors, app, packagesPath, out var loadedTemplates);
+            LoadTemplateFiles(errors, app, blobs, out var loadedTemplates, relativePath);
             app._entropy = new Entropy();
             app._checksum = new ChecksumJson() { ClientStampedChecksum = "Foo", ClientBuildDetails = _buildVerJson };
 
@@ -298,11 +284,11 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         }
 
 
-        private static void LoadTemplateFiles(ErrorContainer errors, CanvasDocument app, string packagesPath, out Dictionary<string, ControlTemplate> loadedTemplates)
+        private static void LoadTemplateFiles(ErrorContainer errors, CanvasDocument app, List<BlobContentWithName> blobs, out Dictionary<string, ControlTemplate> loadedTemplates, string relativePath)
         {
             loadedTemplates = new Dictionary<string, ControlTemplate>();
             var templateList = new List<TemplatesJson.TemplateJson>();
-            foreach (var file in new DirectoryReader(packagesPath).EnumerateFiles(string.Empty, "*.xml", searchSubdirectories: false))
+            foreach (var file in new DirectoryReader(blobs, relativePath).EnumerateFiles(string.Empty, ".xml", searchSubdirectories: false))
             {
                 var xmlContents = file.GetContents();
                 if (!ControlTemplateParser.TryParseTemplate(new TemplateStore(), xmlContents, app._properties.DocumentAppType, loadedTemplates, out var parsedTemplate, out var templateName))
@@ -322,7 +308,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             }
 
             List<PcfTemplateJson> pcfTemplateConversions = new List<PcfTemplateJson>();
-            foreach (var file in new DirectoryReader(packagesPath).EnumerateFiles(PcfConversionDir, "*.json", searchSubdirectories: false))
+            foreach (var file in new DirectoryReader(blobs, relativePath).EnumerateFiles(PcfConversionDir, ".json", searchSubdirectories: false))
             {
                 pcfTemplateConversions.Add(file.ToObject<PcfTemplateJson>());
             }
@@ -333,9 +319,9 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             app._templates = new TemplatesJson() { UsedTemplates = templateList.ToArray(), PcfTemplates = pcfTemplateConversions.ToArray() };
         }
 
-        private static void LoadPcfControlTemplateFiles(ErrorContainer errors, CanvasDocument app, string paControlTemplatesPath)
+        private static void LoadPcfControlTemplateFiles(ErrorContainer errors, CanvasDocument app, List<BlobContentWithName> blobs, string relativePath, string pcfControlTemplatesDir)
         {
-            foreach (var file in new DirectoryReader(paControlTemplatesPath).EnumerateFiles("", "*.json"))
+            foreach (var file in new DirectoryReader(blobs, relativePath).EnumerateFiles(pcfControlTemplatesDir, ".json"))
             {
                 var pcfControl = file.ToObject<PcfControl>();
                 app._pcfControls.Add(pcfControl.Name, file.ToObject<PcfControl>());
@@ -364,7 +350,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
 
         private static void LoadSourceFiles(CanvasDocument app, DirectoryReader directory, Dictionary<string, ControlTemplate> templateDefaults, ErrorContainer errors)
         {
-            foreach (var file in directory.EnumerateFiles(EditorStateDir, "*.json"))
+            foreach (var file in directory.EnumerateFiles(EditorStateDir, ".json"))
             {
                 if (!file._relativeName.EndsWith(".editorstate.json"))
                 {
@@ -391,18 +377,18 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
 
             // For now, the Themes file lives in CodeDir as a json file
             // We'd like to make this .fx.yaml as well eventually
-            foreach (var file in directory.EnumerateFiles(CodeDir, "*.json", searchSubdirectories: false))
+            foreach (var file in directory.EnumerateFiles(CodeDir, ".json", searchSubdirectories: false))
             {
                 if (Path.GetFileName(file._relativeName) == "Themes.json")
                     app._themes = file.ToObject<ThemesJson>();
             }
 
-            foreach (var file in EnumerateComponentDirs(directory, "*.fx.yaml"))
+            foreach (var file in EnumerateComponentDirs(directory, ".fx.yaml"))
             {
                 AddControl(app, file._relativeName, true, file.GetContents(), errors);
             }
 
-            foreach (var file in EnumerateComponentDirs(directory, "*.json"))
+            foreach (var file in EnumerateComponentDirs(directory, ".json"))
             {
                 var componentTemplate = file.ToObject<CombinedTemplateState>();
 
@@ -415,7 +401,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
                 app._templateStore.AddTemplate(componentTemplate.ComponentManifest.Name, componentTemplate);
             }
 
-            foreach (var file in directory.EnumerateFiles(CodeDir, "*.fx.yaml", searchSubdirectories: false))
+            foreach (var file in directory.EnumerateFiles(CodeDir, ".fx.yaml", searchSubdirectories: false))
             {
                 AddControl(app, file._relativeName, false, file.GetContents(), errors);
             }
@@ -423,7 +409,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             // When loading TestSuites sharded files, add them within the top parent AppTest control (i.e. Test_7F478737223C4B69)
             // Make sure to load the the Test_7F478737223C4B69.fx.yaml file first to add the top parent control.
             var shardedTestSuites = new List<DirectoryReader.Entry>();
-            foreach (var file in directory.EnumerateFiles(TestDir, "*.fx.yaml"))
+            foreach (var file in directory.EnumerateFiles(TestDir, ".fx.yaml"))
             {
                 if (file.Kind == FileKind.AppTestParentControl)
                 {
@@ -764,7 +750,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             var tableDefs = new Dictionary<string, DataSourceDefinition>();
             var dataSourceReferences = new Dictionary<string, LocalDatabaseReferenceJson>();
 
-            foreach (var file in directory.EnumerateFiles(DataSourcePackageDir, "*.json"))
+            foreach (var file in directory.EnumerateFiles(DataSourcePackageDir, ".json"))
             {
                 var tableDef = file.ToObject<DataSourceDefinition>();
                 tableDefs.Add(tableDef.EntityName, tableDef);
@@ -809,14 +795,14 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
 
             // key is filename, value is stringified xml
             var xmlDefs = new Dictionary<string, string>();
-            foreach (var file in directory.EnumerateFiles(WadlPackageDir, "*.xml"))
+            foreach (var file in directory.EnumerateFiles(WadlPackageDir, ".xml"))
             {
                 xmlDefs.Add(Path.GetFileNameWithoutExtension(file._relativeName), file.GetContents());
             }
 
             // key is filename, value is stringified json
             var swaggerDefs = new Dictionary<string, string>();
-            foreach (var file in directory.EnumerateFiles(SwaggerPackageDir, "*.json"))
+            foreach (var file in directory.EnumerateFiles(SwaggerPackageDir, ".json"))
             {
                 swaggerDefs.Add(Path.GetFileNameWithoutExtension(file._relativeName), file.GetContents());
             }
@@ -926,7 +912,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             }
 
             var text = PAWriterVisitor.PrettyPrint(ir);
-            dir.WriteAllText(subDir, filename, text);
+            dir.WriteAllText(subDir, new FilePath(filename), text);
 
             // For TestSuite controls, only the top parent control has an editor state created.
             // For other control types, create an editor state.

@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools
 {
-    internal enum SourceKind
+    public enum SourceKind
     {
         Control,
         UxComponent,
@@ -18,7 +18,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         CommandComponent
     }
 
-    internal class SourceFile
+    public class SourceFile
     {
         // the source of truth.
         public ControlInfoJson Value { get; set; }
@@ -32,7 +32,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         // For a data component, this is a guid. Very important.
         public string TemplateName => this.Value.TopParent.Template.Name;
 
-        internal string GetMsAppFilename()
+        public string GetMsAppFilename()
         {
             if (this.Kind == SourceKind.Control)
             {

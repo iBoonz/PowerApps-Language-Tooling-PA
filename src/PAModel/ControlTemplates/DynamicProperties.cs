@@ -2,12 +2,11 @@ using Microsoft.PowerPlatform.Formulas.Tools.Serializers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates
 {
     // Responsible for handling dynamic properties and their default vaues
-    internal static class DynamicProperties
+    public static class DynamicProperties
     {
         // Group container controls add dynamic properties to their children
         private const string GroupContainerTemplate = "groupContainer";
@@ -15,7 +14,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates
         // ... Except for the manual layout variant. It uses the old x/y layout style
         private const string ManualLayoutVariant = "manualLayoutContainer";
 
-        internal static bool AddsChildDynamicProperties(string template, string variant)
+        public static bool AddsChildDynamicProperties(string template, string variant)
         {
             return template == GroupContainerTemplate && variant != ManualLayoutVariant;
         }
@@ -65,15 +64,15 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates
             },
         };
 
-        internal static bool IsResponsiveLayoutProperty(string propertyName)
+        public static bool IsResponsiveLayoutProperty(string propertyName)
         {
             return PropertyDefaultScriptGetters.ContainsKey(propertyName);
         }
 
-        internal static bool TryGetDefaultValue(string propertyName, string template, DefaultRuleHelper defaultRuleHelper, out string defaultValue)
+        public static bool TryGetDefaultValue(string propertyName, string template, DefaultRuleHelper defaultRuleHelper, out string defaultValue)
         {
             defaultValue = null;
-            if (!PropertyDefaultScriptGetters.TryGetValue(propertyName, out  var defaultFunc))
+            if (!PropertyDefaultScriptGetters.TryGetValue(propertyName, out var defaultFunc))
             {
                 return false;
             }
@@ -83,7 +82,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates
         }
 
         // Key is property name, value is default script
-        internal static IEnumerable<KeyValuePair<string, string>> GetDefaultValues(string templateName, DefaultRuleHelper defaultRuleHelper)
+        public static IEnumerable<KeyValuePair<string, string>> GetDefaultValues(string templateName, DefaultRuleHelper defaultRuleHelper)
         {
             return PropertyDefaultScriptGetters.Select(kvp => new KeyValuePair<string, string>(kvp.Key, kvp.Value.Invoke(templateName, defaultRuleHelper)));
         }

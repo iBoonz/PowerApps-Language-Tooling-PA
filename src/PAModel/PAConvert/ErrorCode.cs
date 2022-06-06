@@ -10,7 +10,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
     /// Error codes from reading, writing (compiling) a document.
     /// These numbers must stay stable. 
     /// </summary>
-    internal enum ErrorCode
+    public enum ErrorCode
     {
         // Warnings start at 2000
         ChecksumMismatch = 2001,
@@ -77,7 +77,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
 
     }
 
-    internal static class ErrorCodeExtensions
+    public static class ErrorCodeExtensions
     {
         public static bool IsError(this ErrorCode code)
         {
@@ -126,7 +126,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
 
         public static void InternalError(this ErrorContainer errors, Exception e)
         {
-            errors.AddError(ErrorCode.InternalError, default(SourceLocation), $"Internal error. {e.Message}\r\nStack Trace:\r\n{e.StackTrace}");
+            errors.AddError(ErrorCode.InternalError, default(SourceLocation), $"public error. {e.Message}\r\nStack Trace:\r\n{e.StackTrace}");
         }
 
         public static void UnsupportedOperationError(this ErrorContainer errors, string message)

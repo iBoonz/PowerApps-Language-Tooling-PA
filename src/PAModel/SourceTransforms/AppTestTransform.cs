@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.SourceTransforms
 {
-    internal class AppTestTransform : IControlTemplateTransform
+    public class AppTestTransform : IControlTemplateTransform
     {
         private class TestStepsMetadataJson
         {

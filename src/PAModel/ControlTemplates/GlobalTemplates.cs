@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates
 {
-    internal class GlobalTemplates
+    public class GlobalTemplates
     {
         public static void AddCodeOnlyTemplates(TemplateStore templateStore, Dictionary<string, ControlTemplate> templates, AppType type)
         {

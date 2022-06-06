@@ -5,7 +5,7 @@ using System;
 
 namespace Microsoft.AppMagic.Authoring.Persistence
 {
-    internal class HeaderJson
+    public class HeaderJson
     {
         public Version DocVersion { get; set; }
         public Version MinVersionToLoad { get; set; }

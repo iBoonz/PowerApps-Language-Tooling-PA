@@ -18,7 +18,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
     {
         private List<Error> _errors = new List<Error>();
                 
-        internal void AddError(ErrorCode code, SourceLocation span, string errorMessage)
+        public void AddError(ErrorCode code, SourceLocation span, string errorMessage)
         {
             _errors.Add(new Error(code, span, errorMessage));
         }        
@@ -29,7 +29,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
 
         // Helper for interupting processing once we have errors.
         // Ignores warnings. 
-        internal void ThrowOnErrors()
+        public void ThrowOnErrors()
         {
             if (this.HasErrors)
             {

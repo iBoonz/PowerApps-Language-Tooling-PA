@@ -13,7 +13,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool
 {
-    internal static class Diff
+    public static class Diff
     {
         public static IEnumerable<IDelta> ComputeDelta(CanvasDocument parent, CanvasDocument child)
         {

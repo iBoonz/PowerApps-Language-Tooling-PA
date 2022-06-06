@@ -12,7 +12,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.SourceTransforms
 {
-    internal class DefaultValuesTransform
+    public class DefaultValuesTransform
     {
         private EditorStateStore _controlStore;
         private Theme _theme;

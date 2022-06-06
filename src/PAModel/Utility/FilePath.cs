@@ -12,7 +12,7 @@ using System.Text;
 namespace Microsoft.PowerPlatform.Formulas.Tools.Utility
 {
     [DebuggerDisplay("{ToPlatformPath()}")]
-    internal class FilePath
+    public class FilePath
     {
         public const int MaxFileNameLength = 60;
         private const string yamlExtension = ".fx.yaml";

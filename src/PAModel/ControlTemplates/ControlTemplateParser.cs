@@ -9,11 +9,11 @@ using System.Xml.Linq;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates
 {
-    internal class ControlTemplateParser
+    public class ControlTemplateParser
     {
-        internal static Regex _reservedIdentifierRegex = new Regex(@"%([a-zA-Z]*)\.RESERVED%");
+        public static Regex _reservedIdentifierRegex = new Regex(@"%([a-zA-Z]*)\.RESERVED%");
 
-        internal static bool TryParseTemplate(TemplateStore templateStore, string templateString, AppType type, Dictionary<string, ControlTemplate> loadedTemplates, out ControlTemplate template, out string name)
+        public static bool TryParseTemplate(TemplateStore templateStore, string templateString, AppType type, Dictionary<string, ControlTemplate> loadedTemplates, out ControlTemplate template, out string name)
         {
             template = null;
             name = string.Empty;
@@ -148,7 +148,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates
         }
 
 
-        internal static ControlProperty ParseProperty(XElement property)
+        public static ControlProperty ParseProperty(XElement property)
         {
             var nameAttr = property.Attribute(ControlMetadataXNames.NameAttribute);
             if (nameAttr == null)
@@ -186,7 +186,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates
             return new ControlProperty(nameAttr.Value, defaultValue, phoneDefaultValue, webDefaultValue);
         }
 
-        internal static string UnescapeReservedName(string expression)
+        public static string UnescapeReservedName(string expression)
         {
             return _reservedIdentifierRegex.Replace(expression, "$1");
         }
@@ -211,7 +211,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates
         // Studio replaces them at design-time with the text from the author's current locale.
         // We can't do that here, so we ignore localizationkey default rules when processing defaults
         private static readonly Regex _localizationRegex = new Regex("##(\\w+?)##");
-        internal static bool IsLocalizationKey(string rule)
+        public static bool IsLocalizationKey(string rule)
         {
             return _localizationRegex.IsMatch(rule);
         }

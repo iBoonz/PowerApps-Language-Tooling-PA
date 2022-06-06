@@ -10,7 +10,7 @@ using System.Text.Json.Serialization;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas
 {
-    internal enum ContentKind
+    public enum ContentKind
     {
         Unknown,
         Image,
@@ -19,7 +19,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas
         Pdf,
     }
 
-    internal enum ResourceKind
+    public enum ResourceKind
     {
         LocalFile,
         Uri,
@@ -29,19 +29,19 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas
     // i - refers to image files
     // m - refers to media files - audio/video
     // o - refers to pdf files
-    internal enum Schema
+    public enum Schema
     {
         i,
         m,
         o
     }
 
-    internal class ResourcesJson
+    public class ResourcesJson
     {
         public ResourceJson[] Resources { get; set; }
     }
 
-    internal class ResourceJson
+    public class ResourceJson
     {
         public string Name { get; set; }
         public string FileName { get; set; }

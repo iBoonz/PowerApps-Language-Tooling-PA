@@ -4,7 +4,7 @@
 namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas
 {
     // From PowerApps-Client\src\Cloud\DocumentServer.Core\Document\Document\Persistence\Serialization\Schemas\Control\Template\PcfTemplateJson.cs
-    internal class PcfTemplateJson
+    public class PcfTemplateJson
     {
         public PcfTemplateJson() { }
 
@@ -32,7 +32,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas
     }
 
     // From PowerApps-Client\src\Cloud\PCFManifests\PowerAppsControlManifest.cs
-    internal class ManifestControlConversion
+    public class ManifestControlConversion
     {
         public string From { get; set; }
         public string To { get; set; }
@@ -40,7 +40,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.Schemas
     }
 
     // From PowerApps-Client\src\Cloud\PCFManifests\PowerAppsControlManifest.cs
-    internal class ManifestControlConversionAction
+    public class ManifestControlConversionAction
     {
         public string Name { get; set; }
         public string Type { get; set; }

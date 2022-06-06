@@ -15,7 +15,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
     /// the operation without the creation of many intermediate large
     /// memory blocks.
     /// </summary>
-    internal class LazyList<T> : IEnumerable<T>
+    public class LazyList<T> : IEnumerable<T>
     {
         private readonly IEnumerable<T> values;
 

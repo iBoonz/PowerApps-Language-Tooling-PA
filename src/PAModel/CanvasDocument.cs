@@ -2,19 +2,18 @@
 // Licensed under the MIT License.
 
 using Microsoft.AppMagic.Authoring.Persistence;
-using Microsoft.PowerPlatform.Formulas.Tools.IR;
+using Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates;
 using Microsoft.PowerPlatform.Formulas.Tools.EditorState;
+using Microsoft.PowerPlatform.Formulas.Tools.IR;
+using Microsoft.PowerPlatform.Formulas.Tools.PA;
+using Microsoft.PowerPlatform.Formulas.Tools.Schemas;
+using Microsoft.PowerPlatform.Formulas.Tools.Schemas.PcfControl;
+using Microsoft.PowerPlatform.Formulas.Tools.SourceTransforms;
+using Microsoft.PowerPlatform.Formulas.Tools.Utility;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates;
-using Microsoft.PowerPlatform.Formulas.Tools.SourceTransforms;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
-using Microsoft.PowerPlatform.Formulas.Tools.Schemas;
 using System.IO;
-using Microsoft.PowerPlatform.Formulas.Tools.Utility;
-using Microsoft.PowerPlatform.Formulas.Tools.Schemas.PcfControl;
+using System.Linq;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools
 {
@@ -36,68 +35,68 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
 
         // Track all unknown "files". Ensures round-tripping isn't lossy.         
         // Only contains files of FileKind.Unknown
-        internal Dictionary<FilePath, FileEntry> _unknownFiles = new Dictionary<FilePath, FileEntry>();
+        public Dictionary<FilePath, FileEntry> _unknownFiles = new Dictionary<FilePath, FileEntry>();
 
         // Key is Top Parent Control Name for both _screens and _components
-        internal Dictionary<string, BlockNode> _screens = new Dictionary<string, BlockNode>(StringComparer.Ordinal);
-        internal Dictionary<string, BlockNode> _components = new Dictionary<string, BlockNode>(StringComparer.Ordinal);
+        public Dictionary<string, BlockNode> _screens = new Dictionary<string, BlockNode>(StringComparer.Ordinal);
+        public Dictionary<string, BlockNode> _components = new Dictionary<string, BlockNode>(StringComparer.Ordinal);
 
-        internal EditorStateStore _editorStateStore;
-        internal TemplateStore _templateStore;
+        public EditorStateStore _editorStateStore;
+        public TemplateStore _templateStore;
 
         // Various data sources        
         // This is references\dataSources.json
         // Also includes entries for DataSources made from a DataComponent
         // Key is parent entity name (datasource name for non cds data sources)
-        internal Dictionary<string, List<DataSourceEntry>> _dataSources = new Dictionary<string, List<DataSourceEntry>>(StringComparer.Ordinal);
-        internal List<string> _screenOrder = new List<string>();
+        public Dictionary<string, List<DataSourceEntry>> _dataSources = new Dictionary<string, List<DataSourceEntry>>(StringComparer.Ordinal);
+        public List<string> _screenOrder = new List<string>();
 
 
-        internal HeaderJson _header;
-        internal DocumentPropertiesJson _properties;
-        internal PublishInfoJson _publishInfo;
-        internal TemplatesJson _templates;
-        internal ThemesJson _themes;
-        internal ResourcesJson _resourcesJson;
-        internal ParameterSchema _parameterSchema;
-        internal AppCheckerResultJson _appCheckerResultJson;
-        internal Dictionary<string, PcfControl> _pcfControls = new Dictionary<string, PcfControl>(StringComparer.OrdinalIgnoreCase);
+        public HeaderJson _header;
+        public DocumentPropertiesJson _properties;
+        public PublishInfoJson _publishInfo;
+        public TemplatesJson _templates;
+        public ThemesJson _themes;
+        public ResourcesJson _resourcesJson;
+        public ParameterSchema _parameterSchema;
+        public AppCheckerResultJson _appCheckerResultJson;
+        public Dictionary<string, PcfControl> _pcfControls = new Dictionary<string, PcfControl>(StringComparer.OrdinalIgnoreCase);
 
         // Environment-specific information
         // Extracted from _properties.LocalConnectionReferences
         // Key is a Connection.Id
-        internal IDictionary<string, ConnectionJson> _connections;
+        public IDictionary<string, ConnectionJson> _connections;
 
         // Extracted from _properties.InstrumentationKey
-        internal AppInsightsKeyJson _appInsights;
+        public AppInsightsKeyJson _appInsights;
 
         // Extracted from _properties.LocalDatasourceReferences
         // Key is a dataset name
-        internal IDictionary<string, LocalDatabaseReferenceJson> _dataSourceReferences;
+        public IDictionary<string, LocalDatabaseReferenceJson> _dataSourceReferences;
 
         // Extracted from _properties.LibraryDependencies
         // Must preserve server ordering. 
-        internal ComponentDependencyInfo[] _libraryReferences;
+        public ComponentDependencyInfo[] _libraryReferences;
 
-        internal FileEntry _logoFile;
+        public FileEntry _logoFile;
 
         // Save for roundtripping.
-        internal Entropy _entropy = new Entropy();
+        public Entropy _entropy = new Entropy();
 
         // Checksum from existing msapp. 
-        internal ChecksumJson _checksum;
+        public ChecksumJson _checksum;
 
         // Track all asset files, key is file name
-        internal Dictionary<FilePath, FileEntry> _assetFiles = new Dictionary<FilePath, FileEntry>();
+        public Dictionary<FilePath, FileEntry> _assetFiles = new Dictionary<FilePath, FileEntry>();
 
-        internal UniqueIdRestorer _idRestorer;
+        public UniqueIdRestorer _idRestorer;
 
         // Tracks duplicate asset file information. When a name collision happens we generate a new name for the duplicate asset file.
         // This dictionary stores the metadata information for that file - like OriginalName, NewFileName, Path...
         // Key is a (case-insesitive) new fileName of the resource.
         // Reason for using FileName of the resource as the key is to avoid name collision across different types eg. Images/close.png, Videos/close.mp4.
-        internal Dictionary<string, LocalAssetInfoJson> _localAssetInfoJson = new Dictionary<string, LocalAssetInfoJson>();
-        internal static string AssetFilePathPrefix = @"Assets\";
+        public Dictionary<string, LocalAssetInfoJson> _localAssetInfoJson = new Dictionary<string, LocalAssetInfoJson>();
+        public static string AssetFilePathPrefix = @"Assets\";
 
         #region Save/Load
 
@@ -137,12 +136,10 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             return (doc, errors);
         }
 
-        public static (CanvasDocument, ErrorContainer) LoadFromSources(string pathToSourceDirectory)
+        public static (CanvasDocument, ErrorContainer) LoadFromSources(List<BlobContentWithName> blobContents, ErrorContainer errors, string relativePath)
         {
-            Utilities.EnsurePathRooted(pathToSourceDirectory);
 
-            var errors = new ErrorContainer();
-            var doc = Wrapper(() => SourceSerializer.LoadFromSource(pathToSourceDirectory, errors), errors);
+            var doc = Wrapper(() => SourceSerializer.LoadFromSource(blobContents, errors), errors);
             return (doc, errors);
         }
 
@@ -156,7 +153,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         }
 
         // Used to validate roundtrip after unpack
-        internal ErrorContainer SaveToMsAppValidation(string fullPathToMsApp)
+        public ErrorContainer SaveToMsAppValidation(string fullPathToMsApp)
         {
             Utilities.EnsurePathRooted(fullPathToMsApp);
 
@@ -171,50 +168,51 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         /// <param name="pathToSourceDirectory"></param>
         /// <param name="verifyOriginalPath">true if we should immediately repack the sources to verify they successfully roundtrip. </param>
         /// <returns></returns>
-        public ErrorContainer SaveToSources(string pathToSourceDirectory, string verifyOriginalPath = null)
-        {
-            Utilities.EnsurePathRooted(pathToSourceDirectory);
+        ////public ErrorContainer SaveToSources(string pathToSourceDirectory, string verifyOriginalPath = null)
+        ////{
+        ////    Utilities.EnsurePathRooted(pathToSourceDirectory);
 
-            var errors = new ErrorContainer();
-            Wrapper(() => SourceSerializer.SaveAsSource(this, pathToSourceDirectory, errors), errors);
+        ////    var errors = new ErrorContainer();
+        ////    Wrapper(() => SourceSerializer.SaveAsSource(this, pathToSourceDirectory, errors), errors);
 
 
-            // Test that we can repack
-            if (!errors.HasErrors && verifyOriginalPath != null)
-            {
-                (CanvasDocument msApp2, ErrorContainer errors2) = CanvasDocument.LoadFromSources(pathToSourceDirectory);
-                if (errors2.HasErrors)
-                {
-                    errors2.PostUnpackValidationFailed();
-                    return errors2;
-                }
+        ////    // Test that we can repack
+        ////    if (!errors.HasErrors && verifyOriginalPath != null)
+        ////    {
+        ////        (CanvasDocument msApp2, ErrorContainer errors2) = CanvasDocument.LoadFromSources(pathToSourceDirectory);
+        ////        if (errors2.HasErrors)
+        ////        {
+        ////            errors2.PostUnpackValidationFailed();
+        ////            return errors2;
+        ////        }
 
-                using (var temp = new TempFile())
-                {
-                    errors2 = msApp2.SaveToMsAppValidation(temp.FullPath);
-                    if (errors2.HasErrors)
-                    {
-                        errors2.PostUnpackValidationFailed();
-                        return errors2;
-                    }
+        ////        using (var temp = new TempFile())
+        ////        {
+        ////            errors2 = msApp2.SaveToMsAppValidation(temp.FullPath);
+        ////            if (errors2.HasErrors)
+        ////            {
+        ////                errors2.PostUnpackValidationFailed();
+        ////                return errors2;
+        ////            }
 
-                    bool ok = MsAppTest.Compare(verifyOriginalPath, temp.FullPath, TextWriter.Null, errors2);
-                    if (!ok)
-                    {
-                        errors2.PostUnpackValidationFailed();
-                        return errors2;
-                    }
-                }
-            }
+        ////            bool ok = MsAppTest.Compare(verifyOriginalPath, temp.FullPath, TextWriter.Null, errors2);
+        ////            if (!ok)
+        ////            {
+        ////                errors2.PostUnpackValidationFailed();
+        ////                return errors2;
+        ////            }
+        ////        }
+        ////    }
 
-            return errors;
-        }
-        public static (CanvasDocument, ErrorContainer) MakeFromSources(string appName, string packagesPath, IList<string> paFiles)
-        {
-            var errors = new ErrorContainer();
-            var doc = Wrapper(() => SourceSerializer.Create(appName, packagesPath, paFiles, errors), errors);
-            return (doc, errors);
-        }
+        ////    return errors;
+        ////}
+
+        ////public static (CanvasDocument, ErrorContainer) MakeFromSources(string appName, string packagesPath, IList<string> paFiles)
+        ////{
+        ////    var errors = new ErrorContainer();
+        ////    var doc = Wrapper(() => SourceSerializer.Create(appName, packagesPath, paFiles, errors), errors);
+        ////    return (doc, errors);
+        ////}
 
         #endregion
 
@@ -235,7 +233,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             {
                 if (!errors.HasErrors)
                 {
-                    // Internal error - something was thrown without adding to the error container.
+                    // public error - something was thrown without adding to the error container.
                     // Add at least one error
                     errors.InternalError(e);
                 }
@@ -253,20 +251,20 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             {
                 if (!errors.HasErrors)
                 {
-                    // Internal error - something was thrown without adding to the error container.
+                    // public error - something was thrown without adding to the error container.
                     // Add at least one error
                     errors.InternalError(e);
                 }
             }
         }
 
-        internal CanvasDocument()
+        public CanvasDocument()
         {
             _editorStateStore = new EditorStateStore();
             _templateStore = new TemplateStore();
         }
 
-        internal CanvasDocument(CanvasDocument other)
+        public CanvasDocument(CanvasDocument other)
         {
             foreach (var kvp in other._unknownFiles)
             {
@@ -321,7 +319,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         }
 
         // iOrder is used to preserve ordering value for round-tripping. 
-        internal void AddDataSourceForLoad(DataSourceEntry ds, int? order = null)
+        public void AddDataSourceForLoad(DataSourceEntry ds, int? order = null)
         {
             // Key is parent entity name
             var key = ds.RelatedEntityName ?? ds.Name;
@@ -337,12 +335,12 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         }
 
         // Key is parent entity name
-        internal IEnumerable<KeyValuePair<string, List<DataSourceEntry>>> GetDataSources()
+        public IEnumerable<KeyValuePair<string, List<DataSourceEntry>>> GetDataSources()
         {
             return _dataSources;
         }
 
-        internal void ApplyAfterMsAppLoadTransforms(ErrorContainer errors)
+        public void ApplyAfterMsAppLoadTransforms(ErrorContainer errors)
         {
             // Update volatile documentproperties
             _entropy.SetProperties(_properties);
@@ -397,7 +395,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             this.PersistOrderingOfResourcesJsonEntries();
         }
 
-        internal void ApplyBeforeMsAppWriteTransforms(ErrorContainer errors)
+        public void ApplyBeforeMsAppWriteTransforms(ErrorContainer errors)
         {
             // Update volatile documentproperties
             _entropy.GetProperties(_properties);
@@ -467,8 +465,8 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         }
 
 
-        // Called after loading. This will check internal fields and fill in consistency data. 
-        internal void OnLoadComplete(ErrorContainer errors)
+        // Called after loading. This will check public fields and fill in consistency data. 
+        public void OnLoadComplete(ErrorContainer errors)
         {
             // Do integrity checks. 
             if (_header == null)
@@ -504,7 +502,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         }
 
         // Get ComponentIds for components we've imported. 
-        internal HashSet<string> GetImportedComponents()
+        public HashSet<string> GetImportedComponents()
         {
             var set = new HashSet<string>();
             if (this._libraryReferences != null)
@@ -522,7 +520,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             return FilePath.FromMsAppPath(path.Substring(AssetFilePathPrefix.Length));
         }
 
-        internal void StabilizeAssetFilePaths(ErrorContainer errors)
+        public void StabilizeAssetFilePaths(ErrorContainer errors)
         {
             _entropy.LocalResourceFileNames.Clear();
 
@@ -586,14 +584,15 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
                 _assetFiles.Remove(assetFilePath);
 
                 // Add or Update the assetFile path entry
-                if (_assetFiles.ContainsKey(withoutPrefix)) { 
+                if (_assetFiles.ContainsKey(withoutPrefix))
+                {
                     _assetFiles.Remove(withoutPrefix);
                     _assetFiles.Add(withoutPrefix, fileEntry);
                 }
                 else
                 {
                     _assetFiles.Add(withoutPrefix, fileEntry);
-                }                
+                }
 
                 // For every duplicate asset file an additional <filename>.json file is created which contains information like - originalName, newFileName.
                 if (resource.Name != originalName && !_localAssetInfoJson.ContainsKey(newFileName))
@@ -627,7 +626,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             if (_resourcesJson == null || _assetFiles == null)
                 return;
 
-            var maxFileNumber = FindMaxEntropyFileName();          
+            var maxFileNumber = FindMaxEntropyFileName();
 
             foreach (var resource in _resourcesJson.Resources)
             {
@@ -664,7 +663,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         }
 
         // Helper for traversing and ensuring unique control names. 
-        internal class UniqueControlNameVistor
+        public class UniqueControlNameVistor
         {
             // Control names are case sensitive. 
             private readonly Dictionary<string, SourceLocation?> _names = new Dictionary<string, SourceLocation?>(StringComparer.Ordinal);

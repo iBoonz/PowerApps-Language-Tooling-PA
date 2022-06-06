@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
 {
-    internal interface IDelta
+    public interface IDelta
     {
         void Apply(CanvasDocument document);
     }

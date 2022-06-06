@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
 {
-    internal class RemoveControl : IDelta
+    public class RemoveControl : IDelta
     {
         private ControlPath _parentControlPath;
         private string _controlName;

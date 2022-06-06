@@ -10,7 +10,7 @@ using System.Xml.Linq;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates
 {
-    internal class CommonControlProperties
+    public class CommonControlProperties
     {
         // Key is property name
         private readonly Dictionary<string, ControlProperty> _properties = new Dictionary<string, ControlProperty>();

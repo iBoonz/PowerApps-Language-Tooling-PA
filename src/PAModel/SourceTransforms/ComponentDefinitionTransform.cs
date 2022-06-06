@@ -18,7 +18,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.SourceTransforms
     /// The reverse is true for writing to msapp
     /// This must always be run before the ComponentInstanceTransform in both directions
     /// </summary>
-    internal class ComponentDefinitionTransform
+    public class ComponentDefinitionTransform
     {
         private readonly TemplateStore _templateStore;
         private readonly ComponentInstanceTransform _componentInstanceTransform;

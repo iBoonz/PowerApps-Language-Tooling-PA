@@ -13,7 +13,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.SourceTransforms
 {
-    internal class GalleryTemplateTransform : IControlTemplateTransform
+    public class GalleryTemplateTransform : IControlTemplateTransform
     {
         private static readonly IEnumerable<string> _targets = new List<string>() { "gallery" };
         public IEnumerable<string> TargetTemplates => _targets;

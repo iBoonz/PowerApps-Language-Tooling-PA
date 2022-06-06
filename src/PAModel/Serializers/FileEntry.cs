@@ -13,7 +13,7 @@ using System.Linq;
 namespace Microsoft.PowerPlatform.Formulas.Tools
 {
     // Raw kinds of files we recognize in the .msapp 
-    enum FileKind
+    public enum FileKind
     {
         Unknown,
 
@@ -59,12 +59,12 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         AppTestParentControl,
 
         // Schema.yaml describing app's parameters at top level. 
-        Schema            
+        Schema
     }
 
     // Represent a file from disk or a Zip archive. 
     [DebuggerDisplay("{Name}")]
-    internal class FileEntry
+    public class FileEntry
     {
         // Name relative to root. Can be triaged to a FileKind
         public FilePath Name;
@@ -111,7 +111,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         public const char FilenameLeadingUnderscore = '_';
 
         // Map from path in .msapp to type. 
-        internal static Dictionary<string, FileKind> _fileKinds = new Dictionary<string, FileKind>(StringComparer.OrdinalIgnoreCase)
+        public static Dictionary<string, FileKind> _fileKinds = new Dictionary<string, FileKind>(StringComparer.OrdinalIgnoreCase)
         {
             {"Entities.json", FileKind.OldEntityJSon },
             {"Properties.json", FileKind.Properties },
@@ -139,7 +139,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         };
 
 
-        internal static FilePath GetFilenameForKind(FileKind kind)
+        public static FilePath GetFilenameForKind(FileKind kind)
         {
             string filename =
                 (from kv in _fileKinds
@@ -149,7 +149,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
             return FilePath.FromMsAppPath(filename);
         }
 
-        internal static FileKind TriageKind(FilePath fullname)
+        public static FileKind TriageKind(FilePath fullname)
         {
             FileKind kind;
             if (_fileKinds.TryGetValue(fullname.ToMsAppPath(), out kind))

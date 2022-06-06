@@ -13,10 +13,10 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
     // Various data that we can save for round-tripping.
     // Everything here is optional!!
     // Only be written during MsApp. Opaque for source file.
-    internal class Entropy
+    public class Entropy
     {
         // These come from volatile properties in properties.json in the msapp
-        internal class PropertyEntropy
+        public class PropertyEntropy
         {
             public Dictionary<string, int> ControlCount { get; set; }
             public double? DeserializationLoadTime { get; set; }

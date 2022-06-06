@@ -1,13 +1,11 @@
-﻿// Copyright (c) Microsoft Corporation.
+// Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools
 {
-    internal class ChecksumJson
+    public class ChecksumJson
     {
         // Checksum from client
         public string ClientStampedChecksum { get; set; }

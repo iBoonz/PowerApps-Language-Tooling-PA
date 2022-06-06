@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
 {
-    internal class AddConnection : IDelta
+    public class AddConnection : IDelta
     {
         public string Name;
         public ConnectionJson Contents;
@@ -25,7 +25,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
             document._connections.Add(Name, Contents);
         }
     }
-    internal class RemoveConnection : IDelta
+    public class RemoveConnection : IDelta
     {
         public string Name;
 

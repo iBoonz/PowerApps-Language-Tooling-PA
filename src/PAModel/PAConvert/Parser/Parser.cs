@@ -10,7 +10,7 @@ using System.Text.RegularExpressions;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.Parser
 {
-    internal class Parser
+    public class Parser
     {
         private readonly string _fileName;
         public readonly ErrorContainer _errorContainer;
@@ -51,7 +51,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.Parser
             };
         }
 
-        internal static bool TryParseControlDefCore(string line, out string ctrlName, out string templateName, out string variantName)
+        public static bool TryParseControlDefCore(string line, out string ctrlName, out string templateName, out string variantName)
         {
             ctrlName = templateName = variantName = null;
             if (!TryParseIdent(line, out var parsedIdent, out var length))
@@ -90,7 +90,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools.Parser
             return false;
         }
 
-        internal static  bool TryParseIdent(string source, out string parsed, out int length)
+        public static  bool TryParseIdent(string source, out string parsed, out int length)
         {
             length = 0;
             parsed = null;

@@ -8,12 +8,12 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.SourceTransforms
 {
-    internal class ComponentInstanceTransform : IControlTemplateTransform
+    public class ComponentInstanceTransform : IControlTemplateTransform
     {
         // Key is name in source, value is name in target
         // For AfterRead, that's ComponentID => ComponentName
         // For BeforeWrite, that's ComponentName => ComponentID
-        internal Dictionary<string, string> ComponentRenames = new Dictionary<string, string>();
+        public Dictionary<string, string> ComponentRenames = new Dictionary<string, string>();
         private ErrorContainer _errors;
 
         public ComponentInstanceTransform(ErrorContainer errors)

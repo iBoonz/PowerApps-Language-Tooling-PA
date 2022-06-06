@@ -10,7 +10,7 @@ using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.MergeTool.Deltas
 {
-    internal class AddControl : IDelta
+    public class AddControl : IDelta
     {
         private bool _isInComponent;
         private ControlPath _parentControlPath;
