@@ -232,6 +232,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
         public Entry[] EnumerateFiles(string subdir, string pattern = "", bool searchSubdirectories = true)
         {
             var entries = new List<Entry>();
+            subdir = subdir.Replace("\\", "/");
             foreach (var b in _blobElements)
             {
                 var subIndex = b.Name.IndexOf(_relativePath) + _relativePath.Length;
@@ -240,7 +241,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
                     throw new ArgumentException("start is bigger then contet");
                 }
                 var relativeName = b.Name.Substring(subIndex, b.Name.Length - subIndex);
-                if (relativeName.StartsWith(subdir))
+                if (relativeName.StartsWith(subdir.Replace("*", "")))
                 {
                     if (!relativeName.EndsWith(pattern.Replace("*", "")))
                     {
