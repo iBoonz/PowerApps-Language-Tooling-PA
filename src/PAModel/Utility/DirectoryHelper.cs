@@ -238,7 +238,7 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
                 var subIndex = b.Name.IndexOf(_relativePath) + _relativePath.Length;
                 if (subIndex >= b.Name.Length)
                 {
-                    throw new ArgumentException("start is bigger then contet");
+                    throw new ArgumentException("start is bigger then content");
                 }
                 var relativeName = b.Name.Substring(subIndex, b.Name.Length - subIndex);
                 if (relativeName.StartsWith(subdir.Replace("*", "")))
@@ -247,11 +247,17 @@ namespace Microsoft.PowerPlatform.Formulas.Tools
                     {
                         continue;
                     }
+
                     if (!string.IsNullOrWhiteSpace(subdir))
                     {
+                        if (!searchSubdirectories && relativeName.Count(f => f == '/') > 1)
+                        {
+                            continue;
+                        }
                         var subDirLength = relativeName.IndexOf(subdir) + subdir.Length + 1;
                         relativeName = relativeName.Substring(subDirLength, relativeName.Length - subDirLength);
                     }
+
                     entries.Add(new Entry(b.Name)
                     {
                         _relativeName = relativeName,

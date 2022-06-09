@@ -4,12 +4,8 @@
 using Microsoft.PowerPlatform.Formulas.Tools.ControlTemplates;
 using Microsoft.PowerPlatform.Formulas.Tools.EditorState;
 using Microsoft.PowerPlatform.Formulas.Tools.IR;
-using Microsoft.PowerPlatform.Formulas.Tools.Serializers;
-using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
-using System.Text;
 
 namespace Microsoft.PowerPlatform.Formulas.Tools.SourceTransforms
 {
